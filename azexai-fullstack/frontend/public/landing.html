@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AzexAI — Cognitive Index Platform</title>
+<meta name="description" content="AzexAI — analytical index platform for scenario modeling and risk intelligence.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-card: #161616;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent: #00ff88;
+  --accent-dim: #00cc6a;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(0, 255, 136, 0.3);
+  --glow: rgba(0, 255, 136, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.bg-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px 80px;
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--accent);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 4px 0;
+}
+
+nav a:hover {
+  color: var(--text-primary);
+}
+
+.cta {
+  background: var(--accent);
+  color: var(--bg-primary) !important;
+  padding: 12px 28px !important;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 30px var(--glow);
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px var(--glow), 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: var(--text-primary);
+}
+
+.hero {
+  padding: 160px 80px 120px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+.hero h1 {
+  font-size: 72px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  letter-spacing: -2px;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto 60px;
+  line-height: 1.8;
+}
+
+.tickers {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.ticker {
+  text-decoration: none;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 16px 32px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.ticker:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 255, 136, 0.2);
+}
+
+.ticker-value {
+  color: var(--accent);
+  font-size: 16px;
+  display: block;
+  margin-top: 4px;
+}
+
+section {
+  padding: 120px 80px;
+  position: relative;
+}
+
+section h2 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 60px;
+  text-align: center;
+  color: var(--text-primary);
+  letter-spacing: -1px;
+  position: relative;
+}
+
+#products {
+  background: var(--bg-secondary);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.card {
+  border: 1px solid var(--border);
+  padding: 48px;
+  border-radius: 16px;
+  background: var(--bg-card);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.card h3 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.card p {
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.card a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 600;
+  padding: 14px 28px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.card a:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+footer {
+  padding: 80px 80px 40px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-primary);
+}
+
+.footer-main {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.footer-main p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 20px 24px;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  nav {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .hero {
+    padding: 80px 24px 60px;
+  }
+  
+  .hero h1 {
+    font-size: 40px;
+  }
+  
+  section {
+    padding: 60px 24px;
+  }
+  
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<div class="content-wrapper">
+
+<header>
+  <div class="logo">AZEXAI</div>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/analytics">Analytics</a>
+    <a href="/about">About</a>
+    <a class="cta" href="/login">Launch Platform</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>AzexAI Index Intelligence</h1>
+  <p class="hero-subtitle">Analytical index platform for scenario modeling and risk intelligence. Powered by proprietary computational frameworks.</p>
+  <div class="tickers" id="tickersContainer">
+    <!-- Will be populated by JavaScript -->
+  </div>
+</section>
+
+<section id="products">
+  <h2>Products</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Basic Index</h3>
+      <p>Public analytical index access for fundamental market intelligence and risk assessment. Real-time data aggregation and synthesis.</p>
+      <a href="/dashboard">View Indices →</a>
+    </div>
+    <div class="card">
+      <h3>Index Plus</h3>
+      <p>Deep analytics, benchmarking, scenario modeling, and advanced computational intelligence for institutional-grade decision-making.</p>
+      <a href="/register">Get Plus Access →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-main">
+    <p><strong>© AzexAI, 2026. All rights reserved.</strong></p>
+    <p>Analytical information only. Not an investment recommendation.</p>
+  </div>
+</footer>
+
+</div>
+
+<script>
+// Configuration
+const API_URL = 'http://localhost:5000/api/v1';
+const WS_URL = 'ws://localhost:5000';
+
+// Fetch and display indices
+async function loadIndices() {
+  try {
+    const response = await fetch(`${API_URL}/indices`);
+    const data = await response.json();
+    
+    if (data.success) {
+      const container = document.getElementById('tickersContainer');
+      container.innerHTML = data.data.map(index => `
+        <div class="ticker">
+          ${index.name}
+          <span class="ticker-value">${index.value ? index.value.toFixed(2) : 'N/A'}</span>
+        </div>
+      `).join('');
+    }
+  } catch (error) {
+    console.error('Error loading indices:', error);
+    // Show placeholder data
+    const container = document.getElementById('tickersContainer');
+    container.innerHTML = `
+      <div class="ticker">IIT-S<span class="ticker-value">9.37</span></div>
+      <div class="ticker">Zenith<span class="ticker-value">ACTIVE</span></div>
+      <div class="ticker">Nexus<span class="ticker-value">ACTIVE</span></div>
+      <div class="ticker">Synergy<span class="ticker-value">ACTIVE</span></div>
+      <div class="ticker">Genesis<span class="ticker-value">ACTIVE</span></div>
+    `;
+  }
+}
+
+// Load indices on page load
+loadIndices();
+
+// Reload every 30 seconds
+setInterval(loadIndices, 30000);
+</script>
+
+</body>
+</html>

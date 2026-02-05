@@ -1,0 +1,14 @@
+{
+  "name": "azexai-root",
+  "version": "1.0.0",
+  "description": "Root script to run fullstack application",
+  "scripts": {
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd azexai-fullstack/backend && npm run dev",
+    "frontend": "cd azexai-fullstack/frontend && npm start",
+    "install:all": "cd azexai-fullstack/backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

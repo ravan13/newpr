@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: azexai-postgres
+    environment:
+      POSTGRES_DB: azexai
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - azexai-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: azexai-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - azexai-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: azexai-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=azexai
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres123
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=azexai-super-secret-jwt-key-2026
+      - CORS_ORIGIN=http://localhost:3000,http://localhost:3001
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/src
+      - /app/node_modules
+    networks:
+      - azexai-network
+    restart: unless-stopped
+
+  # Frontend (Optional - if using React build)
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: azexai-frontend
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - REACT_APP_API_URL=http://localhost:5000/api/v1
+  #     - REACT_APP_WS_URL=ws://localhost:5000
+  #   depends_on:
+  #     - backend
+  #   volumes:
+  #     - ./frontend/src:/app/src
+  #     - /app/node_modules
+  #   networks:
+  #     - azexai-network
+  #   restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  azexai-network:
+    driver: bridge
