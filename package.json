@@ -4,8 +4,13 @@
   "description": "Root script to run fullstack application",
   "scripts": {
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "dev": "npm run frontend:dev",
     "backend": "cd azexai-fullstack/backend && npm run dev",
     "frontend": "cd azexai-fullstack/frontend && npm start",
+    "frontend:dev": "cd azexai-fullstack/frontend && npm run dev",
+    "fe:dev:3000": "cd azexai-fullstack/frontend && npm run dev",
+    "fe:dev:3001": "cd azexai-fullstack/frontend && npm run dev -- --port 3001",
+    "fe:double": "concurrently --names \"fe3000,fe3001\" --prefix-colors \"green,magenta\" \"npm run fe:dev:3000\" \"npm run fe:dev:3001\"",
     "install:all": "cd azexai-fullstack/backend && npm install && cd ../frontend && npm install"
   },
   "devDependencies": {
